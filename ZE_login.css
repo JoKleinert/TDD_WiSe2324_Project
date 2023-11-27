@@ -1,0 +1,9 @@
+body{
+    background-image: url("background.png");
+    background-size: 120%;
+    }
+#login_user{
+    background-color: rgb(173, 130, 130);
+    text-align: center;
+    font-size: large;
+}

@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+    <head>
+        <link rel="stylesheet" href="{% static 'ZE_login.css' %}">
+        <script>
+            function plopauf() {
+                var element = document.getElementById("popupDiv");
+                    if (element.style.display === "none") {
+                        element.style.display = "block";} 
+                    else {element.style.display = "none";}
+                }
+        </script>
+        <style>
+        </style>
+    </head>
+    <body>
+        <div id="main_login">
+            <p>Willkommen!</p>
+            <div id="login_user">
+                <h>Anmelung</h>
+                <div id="login_form">
+                    <form method="post" id="form_login">
+                        {% csrf_token %}  
+                        <label for="user">Benutzer</label>
+                        <input type="text" placeholder="" name="user">
+                        <label for="password">Passwort</label>
+                        <input type="password" placeholder="" name="password">
+                        <input type="submit" value="LOGIN">
+                    </form>
+                </div>
+                <div id="register_User">
+                    <button id="popupButton" onclick="plopauf()">Neuer Nutzer</button>
+                </div>
+                <div id="popupDiv" style="display: none">
+                    <form method="post" id="popupForm">
+                        {% csrf_token %} 
+                        <label for="userNew">Benutzer</label>
+                        <input type="text" placeholder="" name="userNew">
+                        <label for="passwordNew">Passwort</label>
+                        <input type="password" placeholder="" name="passwordNew">
+                        <input type="submit" value="Anmelden">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</htlm>
