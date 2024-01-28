@@ -18,6 +18,12 @@
             <p>Willkommen!</p>
             <div id="login_user">
                 <h>Anmelung</h>
+                {% if errorUser %}
+                    <p>{{errorUser}}</p>
+                {% endif %}
+                {% if loginError %}
+                    <p>{{loginError}}</p>
+                {% endif %}
                 <div id="login_form">
                     <form method="post" id="form_login">
                         {% csrf_token %}  
@@ -25,11 +31,11 @@
                         <input type="text" placeholder="" name="user">
                         <label for="password">Passwort</label>
                         <input type="password" placeholder="" name="password">
-                        <input type="submit" value="LOGIN">
+                        <input type="submit" value="LOGIN" name="ausführen">
                     </form>
                 </div>
                 <div id="register_User">
-                    <button id="popupButton" onclick="plopauf()">Neuer Nutzer</button>
+                    <button id="popupButton" onclick="plopauf()">Neuer Nutzer? Hier Registrieren!</button>
                 </div>
                 <div id="popupDiv" style="display: none">
                     <form method="post" id="popupForm">
@@ -38,10 +44,11 @@
                         <input type="text" placeholder="" name="userNew">
                         <label for="passwordNew">Passwort</label>
                         <input type="password" placeholder="" name="passwordNew">
-                        <input type="submit" value="Anmelden">
+                        <input type="submit" value="REGISTER" name="ausführen">
                     </form>
                 </div>
             </div>
+            <p style="font-size: 12px; color: #888; margin-top: 10px;">Bitte verwenden Sie keine Umlaute in Username oder Passwort!</p>
         </div>
     </body>
 </htlm>

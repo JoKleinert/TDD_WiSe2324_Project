@@ -1,9 +1,113 @@
-body{
-    background-image: url("background.png");
-    background-size: 120%;
-    }
-#login_user{
-    background-color: rgb(173, 130, 130);
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f2f2f2;
     text-align: center;
-    font-size: large;
+    margin: 0;
+    padding: 0;
+}
+
+#main_login {
+    max-width: 600px;
+    margin: 50px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+p {
+    font-size: 24px;
+    color: #333;
+}
+
+#login_user {
+    margin-top: 30px;
+}
+
+h {
+    font-size: 18px;
+    color: #333;
+}
+
+#login_form {
+    margin-top: 20px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-top: 10px;
+    font-size: 16px;
+    color: #333;
+}
+
+input {
+    padding: 10px;
+    margin-top: 5px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+input[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    border: none;
+    padding: 10px;
+    margin-top: 15px;
+    border-radius: 5px;
+}
+
+input[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+#register_User {
+    margin-top: 20px;
+}
+
+#popupButton {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#popupButton:hover {
+    background-color: #2980b9;
+}
+
+#popupDiv {
+    margin-top: 20px;
+}
+
+/* Responsive styling */
+@media screen and (max-width: 600px) {
+    #main_login {
+        padding: 10px;
+    }
+
+    p {
+        font-size: 20px;
+    }
+
+    h {
+        font-size: 16px;
+    }
+
+    input {
+        font-size: 14px;
+    }
+
+    #popupButton {
+        font-size: 14px;
+        padding: 8px 12px;
+    }
 }

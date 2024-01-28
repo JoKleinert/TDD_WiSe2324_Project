@@ -1,0 +1,18 @@
+{% load static %}
+<!DOCTYPE html>
+    <head>
+        <link rel="stylesheet" href="{% static 'ZE_logout.css' %}">
+        <script>
+            function redirectBackLogin(){
+                window.location.href = "http://193.196.52.227:8000/SE3/login/"  
+                // '"login/";'
+            }
+        </script>
+        <style>
+        </style>
+    </head>
+    <body>
+        <p>Sie sind erfolgreich Abgemeldet</p>
+        <button onclick="redirectBackLogin()">Zurück zum LOGIN</button>
+    </body>
+</htlm>

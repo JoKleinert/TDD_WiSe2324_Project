@@ -1,0 +1,37 @@
+/* ZE_logout.css */
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f2f2f2;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+p {
+    font-size: 20px;
+    color: #333;
+    margin-top: 50px;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 15px 20px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* Responsive styling */
+@media screen and (max-width: 600px) {
+    button {
+        padding: 10px 15px;
+    }
+}

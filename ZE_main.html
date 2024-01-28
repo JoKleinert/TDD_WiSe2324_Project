@@ -1,16 +1,28 @@
+{% load static %}
 <!DOCTYPE html>
     <head>
-        <link rel="stylesheet" href="ZE_main.css">
+        <link rel="stylesheet" href="{% static 'ZE_main copy.css' %}">
         <script>
+            function deleteCookieAndRedirect() {
+                document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                document.cookie = "userStatus=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                window.location.href = "logout/";
+        }
         </script>
         <style>
+            
         </style>
     </head>
     <body>
         <div id="everything">
+            <div>
+                <p>Willkommen, <strong>{{ username }}</strong>!</p>
+                <p>Ihr Account-Status: {{ userStatus }}</p>
+            </div>
             <div id ="zeiteinträge">
-                <h>Zeiteintragungen</h>
-                <form>
+                <h style="font-size: 24px; text-decoration: underline;">Zeiteintragungen</h>
+                <form method="post" id="eintragsForm"> 
+                    {% csrf_token %}
                     <table id="inputs">
                         <thead>
                             <th>Datum</th>
@@ -20,40 +32,280 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td><input></td>
-                                <td><input></td>
-                                <td><input></td>
-                                <td><input></td>
+                                <td><input type="date" name="date" required></td>
+                                <td><input type="number" name="time" placeholder="Zeit in Minuten" min="0" required></td>
+                                <td>
+                                    <select name="modul" required>
+                                        <option value="M1">Modul 1: TDD</option>
+                                        <option value="M2">Modul 2: Verwaltungsmanagement</option>
+                                        <option value="M3">Modul 3: Rechtliche Grundlagen</option>
+                                        <option value="M4">Modul 4: Digital Leadership</option>
+                                        <option value="M5">Modul 5: Praktikum</option>
+                                        <option value="M6">Modul 6: Fallstudien</option>
+                                        <option value="M7">Modul 7: Bachelorarbeit</option>
+                                </td>
+                                <td><input type="text" name="beschreibung" required></td>
+                                <td>
+                                    <select name="semester">
+                                        <option value="S1">Semester 1</option>
+                                        <option value="S2">Semester 2</option>
+                                        <option value="S3">Semester 3</option>
+                                        <option value="S4">Semester 4</option>
+                                        <option value="S5">Semester 5</option>
+                                        <option value="S6">Semester 6</option>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
-                    <input type="submit" value="Speichern">
+                    <input type="submit" value="Speichern" name="ausführen">
                 </form>
             </div>
             <div id="übersicht">
-                <h>Übersicht</h>
+                <h style="font-size: 24px; text-decoration: underline;">Übersicht der Einträge</h>
                 <table id="uebersicht">
                     <thead>
+                        <th>Eintrag-Nr.</th>
                         <th>Datum</th>
                         <th>Zeit</th>
                         <th>Modul</th>
                         <th>Beschreibung</th>
+                        <th>Semester</th>
                     </thead>
+                    {% for eintrag in einträge%}
                     <tbody>
                         <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <td>{{forloop.counter}}</td>
+                            <td>{{eintrag.date}}</td>  
+                            <td>{{eintrag.time}}</td>
+                            <td>{{eintrag.modul}}</td>
+                            <td>{{eintrag.beschreibung}}</td>
+                            <td>{{eintrag.semester}}</td>
                         </tr>
+                    {% endfor %}
                     </tbody>
                 </table>
+            <form method="post">
+            </div>
+            <div id="timeCalculate">
+                <h style="font-size: 24px; text-decoration: underline;">Zeitübersicht</h>
+                <table id="test!!">
+                    <thead>
+                        <th>Semester</th>
+                        <th>Semester 1</th>
+                        <th>Semester 2</th>
+                        <th>Semester 3</th>
+                        <th>Semester 4</th>
+                        <th>Semester 5</th>
+                        <th>Semester 6</th>
+                        <th>Modul Insgesamt</th>
+                    </thead>
+                    <tr>
+                    	<th>Modul 1</th>
+                        <td>{{ semesterZeiten.M1.S1 }}</td>
+                        <td>{{ semesterZeiten.M1.S2 }}</td>
+                        <td>{{ semesterZeiten.M1.S3 }}</td>
+                        <td>{{ semesterZeiten.M1.S4 }}</td>
+                        <td>{{ semesterZeiten.M1.S5 }}</td>
+                        <td>{{ semesterZeiten.M1.S6 }}</td>
+                        <td>{{ gesamtZeiten.M1 }}</td>
+                     </tr>
+                     <tr>
+                    	<th>Modul 2</th>
+                        <td>{{ semesterZeiten.M2.S1 }}</td>
+                        <td>{{ semesterZeiten.M2.S2 }}</td>
+                        <td>{{ semesterZeiten.M2.S3 }}</td>
+                        <td>{{ semesterZeiten.M2.S4 }}</td>
+                        <td>{{ semesterZeiten.M2.S5 }}</td>
+                        <td>{{ semesterZeiten.M2.S6 }}</td> 
+                        <td>{{ gesamtZeiten.M2 }}</td>                     
+                     </tr>
+                     <tr>
+                    	<th>Modul 3</th>
+                        <td>{{ semesterZeiten.M3.S1 }}</td>
+                        <td>{{ semesterZeiten.M3.S2 }}</td>
+                        <td>{{ semesterZeiten.M3.S3 }}</td>
+                        <td>{{ semesterZeiten.M3.S4 }}</td>
+                        <td>{{ semesterZeiten.M3.S5 }}</td>
+                        <td>{{ semesterZeiten.M3.S6 }}</td>
+                        <td>{{ gesamtZeiten.M3 }}</td>  
+                     </tr>
+                     <tr>
+                    	<th>Modul 4</th>
+                        <td>{{ semesterZeiten.M4.S1 }}</td>
+                        <td>{{ semesterZeiten.M4.S2 }}</td>
+                        <td>{{ semesterZeiten.M4.S3 }}</td>
+                        <td>{{ semesterZeiten.M4.S4 }}</td>
+                        <td>{{ semesterZeiten.M4.S5 }}</td>
+                        <td>{{ semesterZeiten.M4.S6 }}</td>  
+                        <td>{{ gesamtZeiten.M4 }}</td>
+                     </tr>
+                     <tr>
+                    	<th>Modul 5</th>
+                        <td>{{ semesterZeiten.M5.S1 }}</td>
+                        <td>{{ semesterZeiten.M5.S2 }}</td>
+                        <td>{{ semesterZeiten.M5.S3 }}</td>
+                        <td>{{ semesterZeiten.M5.S4 }}</td>
+                        <td>{{ semesterZeiten.M5.S5 }}</td>
+                        <td>{{ semesterZeiten.M5.S6 }}</td>  
+                        <td>{{ gesamtZeiten.M5 }}</td>
+                     </tr>
+                     <tr>
+                    	<th>Modul 6</th>
+                        <td>{{ semesterZeiten.M6.S1 }}</td>
+                        <td>{{ semesterZeiten.M6.S2 }}</td>
+                        <td>{{ semesterZeiten.M6.S3 }}</td>
+                        <td>{{ semesterZeiten.M6.S4 }}</td>
+                        <td>{{ semesterZeiten.M6.S5 }}</td>
+                        <td>{{ semesterZeiten.M6.S6 }}</td> 
+                        <td>{{ gesamtZeiten.M6 }}</td> 
+                     </tr>
+                     <tr>
+                        <th>Modul 7</th>
+                        <td>{{ semesterZeiten.M7.S1 }}</td>
+                        <td>{{ semesterZeiten.M7.S2 }}</td>
+                        <td>{{ semesterZeiten.M7.S3 }}</td>
+                        <td>{{ semesterZeiten.M7.S4 }}</td>
+                        <td>{{ semesterZeiten.M7.S5 }}</td>
+                        <td>{{ semesterZeiten.M7.S6 }}</td> 
+                        <td>{{ gesamtZeiten.M7 }}</td> 
+                    </tr>
+                     <tr>
+                     	<th>Semester gesamt</th>
+                        <td>{{ semesterGesamt.S1}}</td>
+                        <td>{{ semesterGesamt.S2}}</td>
+                        <td>{{ semesterGesamt.S3}}</td>
+                        <td>{{ semesterGesamt.S4}}</td>
+                        <td>{{ semesterGesamt.S5}}</td>
+                        <td>{{ semesterGesamt.S6}}</td>
+                     </tr>
+                </table>
+                <p style="text-decoration: underline;">Gesamt Zeit (alle Module & alle Semester): {{ gesamtGesamt }}</p> 
+            </div>
+            {% comment %} ab hier das bearbeiten in Probe {% endcomment %}
+            <div id="bearbeiten">
+                <h style="font-size: 24px; text-decoration: underline;">Beitrag bearbeiten<h>
+                <form method="post" id="eintragsForm"> 
+                    {% csrf_token %}
+                    <table id="inputs">
+                        <thead>
+                            <th>Beitragsnummer</th>
+                            <th>Datum</th>
+                            <th>Zeit</th>
+                            <th>Modul</th>
+                            <th>Beschreibung</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input type="number" name="number" placeholder="Nummer des Eintrags" min="1" required></td>
+                                <td><input type="date" name="neudate" required></td>
+                                <td><input type="number" name="neutime" placeholder="Zeit in Minuten" min="0" required></td>
+                                <td>
+                                    <select name="neumodul" required>
+                                        <option value="M1">Modul 1: TDD</option>
+                                        <option value="M2">Modul 2: Verwaltungsmanagement</option>
+                                        <option value="M3">Modul 3: Rechtliche Grundlagen</option>
+                                        <option value="M4">Modul 4: Digital Leadership</option>
+                                        <option value="M5">Modul 5: Praktikum</option>
+                                        <option value="M6">Modul 6: Fallstudien</option>
+                                        <option value="M7">Modul 7: Bachelorarbeit</option>
+                                </td>
+                                <td><input type="text" name="neubeschreibung" required></td>
+                                <td>
+                                    <select name="neusemester">
+                                        <option value="S1">Semester 1</option>
+                                        <option value="S2">Semester 2</option>
+                                        <option value="S3">Semester 3</option>
+                                        <option value="S4">Semester 4</option>
+                                        <option value="S5">Semester 5</option>
+                                        <option value="S6">Semester 6</option>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <input type="submit" name="ausführen" value="bearbeiten">
+                </form>
+            </div>
+            {% comment %} Zum löschen {% endcomment %}
+            <div id="löschen">
+                <h style="font-size: 24px; text-decoration: underline;">Beitrag löschen:</h>
+                <form method="post" id="eintragsForm"> 
+                    {% csrf_token %}
+                    <table id="inputs">
+                        <thead>
+                            <th>Beitragsnummer</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input type="number" name="deleteNumber" placeholder="Nummer des Eintrags" min="1" required></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <input type="submit" name="ausführen" value="löschen">
+                </form>
             </div>
             <div id="zusatzFunktionen">
-                <button>Detailansicht</button>
-                <button>Hochladen</button>
-                <button>Download</button>
-                <button>Anfragen</button>
+                <h style="font-size: 24px; text-decoration: underline;">Weitere Funktionen:</h>
+                <form method="post" action="" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="file" name="myfile" required>
+                    <button type="submit" name="ausführen" value="upload">Hochladen</button>
+                    <p>Bitte beachten: Aktuell werden nur Dateien im json-Format angenommen! Andere Formate können die Integration des Systems gefärden. Eltern haften für ihre Kinder. </p>
+                </form>
+                <form method="post" action="">
+                    {% csrf_token %}
+                    <p>Hier können Sie Ihre Beträge im json-Format runterladen:
+                    <button type="submit" name="ausführen" value="download">Download .json</button></p>
+                </form>
+                <form method="post" action="">
+                    {% csrf_token %}
+                    <p>Hier können Sie Ihre Beiträge im csv-Format runterladen:
+                    <button type="submit" name="ausführen" value="downloadCSV">Download .csv</button></p>
+                </form>
+               <form method="post" action="">
+                    {% csrf_token %}
+                    <p>Hier können Sie Ihre Beiträge im xml-Format runterladen:
+                    <button type="submit" name="ausführen" value="downloadXML">Download .xml</button></p>
+                </form>
+                <form method="post" action="">
+                    {% csrf_token %}
+                    <p>Hier können Sie Ihre Übersicht im json-Format runterladen:
+                    <button type="submit" name="ausführen" value="downloadUEBER">Download Übersicht .json</button></p>
+                </form>
+            </div>
+            <div id="logout">
+                <button onclick="deleteCookieAndRedirect()" style="font-size: 18px; background-color: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer;">ABMELDEN</button>
+            </div>
+            <div id="komplettAbmelden">
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" name="ausführen" value="komplettAbmelden" style="font-size: 18px; background-color: #e74c3c;">Account Löschen</button>
+                </form>
+            </div>
+            <div id="adminFunctions">
+                {% comment %} {{userList}} {% endcomment %}
+                {% if userStatus == "admin"%}
+                    <p>Aktuelle Nutzer:</p>
+                    {% for user in userList %}
+                        <p>User: {{ user.0 }}; Status: {{ user.1 }}</p> 
+                    {% endfor %}
+                    <p>Admin-Anfragen:<p>
+                    {% for x in adminRequests %}
+                        <p>{{ x }}</p>
+                    {% endfor %}
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="text" name="user" required>
+                    <button type="submit" name="ausführen" value="adminZulassen">Anfrage zustimmen</button>
+                </form>
+                {% comment %} SICHERER ALS BUTTON-LÖSUNG {% endcomment %}
+                {% else %}
+                    <p>Sie sind kein Admin</p>
+                    <form method="post">
+                        {% csrf_token %}
+                        <p>Möchten Sie einen Antrag auf Adminstatus abschicken?
+                        <button type="submit" name="ausführen" value="adminAntrag">HIER</button> drücken!</p>
+                    </form>
+                {% endif %}      
             </div>
         </div>
     </body>
